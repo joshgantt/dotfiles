@@ -7,7 +7,8 @@ function run {
   fi
 }
 
-feh --bg-fill ~/pictures/background
+#feh --bg-fill ~/pictures/background
+wal -R
 compton -b
 xfce4-power-manager
 nm-applet &

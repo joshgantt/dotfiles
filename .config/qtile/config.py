@@ -27,21 +27,18 @@
 from libqtile.config import Key, Screen, Group, Drag, Click, ScratchPad, DropDown
 from libqtile.command import lazy
 from libqtile import layout, bar, widget, hook
+from libqtile.log_utils import logger
 
 from typing import List  # noqa: F401
 
 import subprocess
-from time import time
 from pathlib import Path
 import os
 import json
-import logging
 
 # Open the pywal generated json color scheme; set colors from it
 with open("/home/josh/.cache/wal/colors.json", "r") as f:
     theme = json.load(f)
-
-logging.basicConfig(filename='/home/josh/.config/qtile/qtile.log', format='%(asctime)s:%(levelname)s:: %(message)s', datefmt='%m/%d/%Y %T', level=logging.INFO)
 
 BACKGROUND = theme["special"]["background"]
 FOREGROUND = theme["special"]["foreground"]
@@ -64,30 +61,36 @@ COLOR14 = theme["colors"]["color14"]
 COLOR15 = theme["colors"]["color15"]
 
 mod = "mod4"
-TERMINAL = 'termite'
+alt = "mod1"
+TERMINAL = "termite"
 
 groups = [Group(i) for i in "123456"]
+
+def switch_screens(target_screen):
+    '''Send the current group to the other screen.'''
+    @lazy.function
+    def _inner(qtile):
+        current_group = qtile.screens[1 - target_screen].group
+        qtile.screens[target_screen].setGroup(current_group)
+
+    return _inner
 
 def focus_or_switch(group_name):
     '''
     Focus the selected group on the current screen or switch to the other
     screen if the group is currently active there
     '''
-    logging.info(f"focus_or_switch called with group_name {group_name}")
     @lazy.function
     def __inner(qtile):
-        logging.info(f"qtile object is {qtile}")
         # Check what groups are currently active
         groups = [s.group.name for s in qtile.screens]
-        logging.info(f"screengroups built as {groups}")
+        logger.exception(f'DEBUG: in {__name__} looking for {group_name} in {groups} and qtile {qtile}')
         try:
             # Jump to that screen if we are active
             index = groups.index(group_name)
-            logging.info(f"Found index {index} for group {group_name}")
             qtile.toScreen(index)
         except ValueError:
             # We're not active so pull the group to the current screen
-            logging.info(f"Excepted, trying to setGroup to {qtile.groupMap[group_name]}")
             qtile.currentScreen.setGroup(qtile.groupMap[group_name])
 
     return __inner
@@ -121,52 +124,64 @@ keys = [
     Key([mod, "shift"], "Up", lazy.layout.shuffle_up()),
     Key([mod, "shift"], "Left", lazy.layout.shuffle_left()),
     Key([mod, "shift"], "Right", lazy.layout.shuffle_right()),
-    Key([mod, "control"], "Down", lazy.layout.grow_down()),
-    Key([mod, "control"], "Up", lazy.layout.grow_up()),
-    Key([mod, "control"], "Left", lazy.layout.grow_left()),
-    Key([mod, "control"], "Right", lazy.layout.grow_right()),
+    Key([mod, "control"], "Left", switch_screens(0), lazy.to_screen(0)),
+    Key([mod, "control"], "Right", switch_screens(1), lazy.to_screen(1)),
+    Key([mod, alt], "Down", lazy.layout.grow_down()),
+    Key([mod, alt], "Up", lazy.layout.grow_up()),
+    Key([mod, alt], "Left", lazy.layout.grow_left()),
+    Key([mod, alt], "Right", lazy.layout.grow_right()),
 
     # Switch window focus to other pane(s) of stack
     Key([mod], "space", lazy.layout.next()),
-
-    # Swap panes of split stack
-    #Key([mod, "shift"], "space", lazy.layout.rotate()),
-
-    # Toggle between split and unsplit sides of stack.
-    # Split = all windows displayed
-    # Unsplit = 1 window displayed, like Max layout, but still with
-    # multiple stack panes
-    Key([mod, "shift"], "Return", lazy.layout.toggle_split()),
-    Key([mod], "Return", lazy.spawn(TERMINAL)),
-    Key([mod], "e", lazy.spawn('thunar')),
+    Key([mod, "shift"], "Return", lazy.layout.toggle_split()),    
 
     # Toggle between different layouts as defined below
     Key([mod, "control"], "space", lazy.next_layout()),
-    Key([mod], "q", lazy.window.kill()),
-
     # Toggle Floating
     Key([mod, "shift"], "space", lazy.window.toggle_floating()),
+    # Toggle Fullscreen
+    Key([mod], "f", lazy.window.toggle_fullscreen()),
+
+
+    Key([mod], "q", lazy.window.kill()),
+    Key([mod], "d", lazy.spawncmd()),
 
     Key([mod, "control"], "r", lazy.restart()),
     Key([mod, "shift"], "Escape", lazy.shutdown()),
-    Key([mod], "d", lazy.spawncmd()),
+
+    # Launch applications
+    Key([mod], "Return", lazy.spawn(TERMINAL)),
+    Key([mod], "e", lazy.spawn('thunar')),
 
     Key([mod], "l", lazy.spawn('betterlockscreen -l')),
-    Key([mod, "shift"], "s", lazy.spawn('cliptool'))
+    Key([mod, "shift"], "s", lazy.spawn('cliptool')),
+
+    # Audio/media controls
+    Key([], "XF86AudioRaiseVolume", lazy.spawn('pactl set-sink-volume @DEFAULT_SINK@ +5%')),
+    Key([], "XF86AudioLowerVolume", lazy.spawn('pactl set-sink-volume @DEFAULT_SINK@ -5%')),
+    Key([], "XF86AudioMute", lazy.spawn('pactl set-sink-mute @DEFAULT_SINK@ toggle')),
+    Key([], "XF86AudioMicMute", lazy.spawn('pactl set-source-mute @DEFAULT_SOURCE@ toggle')),
+    Key([], "XF86AudioPlay", lazy.spawn('playerctl play-pause')),
+    Key([], "XF86AudioNext", lazy.spawn('playerctl next')),
+    Key([], "XF86AudioPrev", lazy.spawn('playerctl previous')),
+    Key([], "XF86AudioStop", lazy.spawn('playerctl stop'))
 ]
 
 for i in groups:
     keys.extend([
-        # mod1 + letter of group = switch to group
         Key([mod], i.name, lazy.group[i.name].toscreen()),
         Key([mod, "control"], i.name, focus_or_switch(i.name)),
 
-        # mod1 + shift + letter of group = switch to & move focused window to group
         Key([mod, "shift"], i.name, lazy.window.togroup(i.name))
     ])
 
-groups.append(ScratchPad("scratchpad", [DropDown("term", "termite --title 'Dropdown Terminal'", on_focus_lost_hide=True, x=0.1, y=0.0, width=0.8, height=0.7, warp_pointer=False) ]))
+groups.append(ScratchPad("scratchpad", [
+    DropDown("term", "termite --title 'Dropdown Terminal'",
+        on_focus_lost_hide=True, x=0.1, y=0.0, width=0.8, height=0.7, warp_pointer=False),
+    DropDown("spotify", "spotify", on_focus_lost_hide=True, x=0.1, y=0.0, width=0.8, height=0.8, warp_pointer=False)
+]))
 keys.append(Key([mod], "grave", lazy.group["scratchpad"].dropdown_toggle("term")))
+keys.append(Key([mod], "Tab", lazy.group["scratchpad"].dropdown_toggle("spotify")))
 
 layouts = [
     #layout.Max(),
@@ -246,7 +261,7 @@ mouse = [
 
 dgroups_key_binder = None
 dgroups_app_rules = []  # type: List
-main = None
+#main = None
 follow_mouse_focus = False
 bring_front_click = False
 cursor_warp = False
@@ -264,6 +279,7 @@ floating_layout = layout.Floating(float_rules=[
     {'wmclass': 'maketag'},  # gitk
     {'wname': 'branchdialog'},  # gitk
     {'wname': 'pinentry'},  # GPG key password entry
+    {'wname': 'dukemed.webex.com is sharing your screen.'},
     {'wmclass': 'ssh-askpass'},  # ssh-askpass
     {'wmclass': 'pavucontrol'},
     {'wmclass': 'gcr-prompter'},

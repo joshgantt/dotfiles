@@ -103,7 +103,7 @@ fpath=(/usr/local/share/zsh-completions $fpath)
 rm -f "$HOME/.zcompdump"; compinit
 
 alias ssh="TERM=xterm ssh"
-alias config='/usr/bin/git --git-dir=$HOME/dotfiles/ --work-tree=$HOME'
+alias config='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
 
 (cat ~/.cache/wal/sequences &)
 source ~/.cache/wal/colors-tty.sh
