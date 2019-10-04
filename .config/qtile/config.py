@@ -71,7 +71,7 @@ def switch_screens(target_screen):
     @lazy.function
     def _inner(qtile):
         current_group = qtile.screens[1 - target_screen].group
-        qtile.screens[target_screen].setGroup(current_group)
+        qtile.screens[target_screen].set_group(current_group)
 
     return _inner
 
@@ -84,14 +84,13 @@ def focus_or_switch(group_name):
     def __inner(qtile):
         # Check what groups are currently active
         groups = [s.group.name for s in qtile.screens]
-        logger.exception(f'DEBUG: in {__name__} looking for {group_name} in {groups} and qtile {qtile}')
         try:
             # Jump to that screen if we are active
             index = groups.index(group_name)
-            qtile.toScreen(index)
+            qtile.focus_screen(index)
         except ValueError:
             # We're not active so pull the group to the current screen
-            qtile.currentScreen.setGroup(qtile.groupMap[group_name])
+            qtile.current_screen.set_group(qtile.groups_map[group_name])
 
     return __inner
 
@@ -124,8 +123,8 @@ keys = [
     Key([mod, "shift"], "Up", lazy.layout.shuffle_up()),
     Key([mod, "shift"], "Left", lazy.layout.shuffle_left()),
     Key([mod, "shift"], "Right", lazy.layout.shuffle_right()),
-    Key([mod, "control"], "Left", switch_screens(0), lazy.to_screen(0)),
-    Key([mod, "control"], "Right", switch_screens(1), lazy.to_screen(1)),
+    Key([mod, "control"], "Left", switch_screens(0), lazy.next_screen()),
+    Key([mod, "control"], "Right", switch_screens(1), lazy.next_screen()),
     Key([mod, alt], "Down", lazy.layout.grow_down()),
     Key([mod, alt], "Up", lazy.layout.grow_up()),
     Key([mod, alt], "Left", lazy.layout.grow_left()),
@@ -169,8 +168,8 @@ keys = [
 
 for i in groups:
     keys.extend([
-        Key([mod], i.name, lazy.group[i.name].toscreen()),
-        Key([mod, "control"], i.name, focus_or_switch(i.name)),
+        Key([mod, "control"], i.name, lazy.group[i.name].toscreen()),
+        Key([mod], i.name, focus_or_switch(i.name)),
 
         Key([mod, "shift"], i.name, lazy.window.togroup(i.name))
     ])
@@ -264,7 +263,7 @@ dgroups_app_rules = []  # type: List
 #main = None
 follow_mouse_focus = False
 bring_front_click = False
-cursor_warp = False
+cursor_warp = True
 floating_layout = layout.Floating(float_rules=[
     {'wmclass': 'confirm'},
     {'wmclass': 'dialog'},
