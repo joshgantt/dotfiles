@@ -12,5 +12,4 @@ wal -R
 compton -b
 xfce4-power-manager
 nm-applet &
-#pulseaudio -D
-pasystray &
+pa-applet &

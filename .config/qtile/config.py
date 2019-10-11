@@ -64,7 +64,15 @@ mod = "mod4"
 alt = "mod1"
 TERMINAL = "termite"
 
-groups = [Group(i) for i in "123456"]
+#groups = [Group(i) for i in "123456"]
+groups = [
+    Group("1", screen_affinity=0),
+    Group("2", screen_affinity=1),
+    Group("3", screen_affinity=0),
+    Group("4", screen_affinity=1),
+    Group("5", screen_affinity=0),
+    Group("6", screen_affinity=0)
+]
 
 def switch_screens(target_screen):
     '''Send the current group to the other screen.'''
@@ -153,13 +161,11 @@ keys = [
     Key([mod], "e", lazy.spawn('thunar')),
 
     Key([mod], "l", lazy.spawn('betterlockscreen -l')),
-    Key([mod, "shift"], "s", lazy.spawn('cliptool')),
+    Key([mod, "shift"], "s", lazy.spawn('import png:- | xclip -selection c -t image/png')),
+    Key([], "Print", lazy.spawn('scrot pictures/screenshots/%Y-%m-%d_%T.png')),
+    Key([alt], "Print", lazy.spawn('scrot -u -b pictures/screenshots/Window_%Y-%m-%d_%T.png')),
 
     # Audio/media controls
-    Key([], "XF86AudioRaiseVolume", lazy.spawn('pactl set-sink-volume @DEFAULT_SINK@ +5%')),
-    Key([], "XF86AudioLowerVolume", lazy.spawn('pactl set-sink-volume @DEFAULT_SINK@ -5%')),
-    Key([], "XF86AudioMute", lazy.spawn('pactl set-sink-mute @DEFAULT_SINK@ toggle')),
-    Key([], "XF86AudioMicMute", lazy.spawn('pactl set-source-mute @DEFAULT_SOURCE@ toggle')),
     Key([], "XF86AudioPlay", lazy.spawn('playerctl play-pause')),
     Key([], "XF86AudioNext", lazy.spawn('playerctl next')),
     Key([], "XF86AudioPrev", lazy.spawn('playerctl previous')),
@@ -177,16 +183,23 @@ for i in groups:
 groups.append(ScratchPad("scratchpad", [
     DropDown("term", "termite --title 'Dropdown Terminal'",
         on_focus_lost_hide=True, x=0.1, y=0.0, width=0.8, height=0.7, warp_pointer=False),
-    DropDown("spotify", "spotify", on_focus_lost_hide=True, x=0.1, y=0.0, width=0.8, height=0.8, warp_pointer=False)
+    DropDown("spotify", "spotify",
+        on_focus_lost_hide=True, x=0.1, y=0.0, width=0.8, height=0.8, warp_pointer=False)
 ]))
 keys.append(Key([mod], "grave", lazy.group["scratchpad"].dropdown_toggle("term")))
 keys.append(Key([mod], "Tab", lazy.group["scratchpad"].dropdown_toggle("spotify")))
 
+layout_defaults = dict(
+    border_width=2,
+    border_focus=COLOR6,
+    border_normal=COLOR8
+)
+
 layouts = [
     #layout.Max(),
     #layout.Stack(num_stacks=2),
-    layout.Bsp(margin=8, fair=False, border_focus=COLOR6, border_normal=COLOR8),
-    layout.Floating(border_focus=COLOR4, border_normal=COLOR8)
+    layout.Bsp(margin=8, fair=False, **layout_defaults),
+    layout.Floating(**layout_defaults)
     #layout.Tile()
 ]
 
@@ -201,7 +214,6 @@ extension_defaults = widget_defaults.copy()
 
 screens = [
     Screen(
-        #top=bar.Gap(size=35),
         top=bar.Bar(
             [
                 widget.TextBox("B", font='OpenLogos', fontsize=23, name="logo", background=COLOR6, foreground=BACKGROUND),
@@ -209,8 +221,15 @@ screens = [
                     text="◢", fontsize=50, padding=0, background=COLOR6, foreground=BACKGROUND
                 ),
                 widget.CurrentLayoutIcon(scale=.65),
-                widget.GroupBox(center_aligned=True, this_current_screen_border=COLOR6, urgent_border=COLOR1),
-                widget.WindowName(),
+                widget.GroupBox(
+                    center_aligned=True,
+                    this_current_screen_border=COLOR6,
+                    other_current_screen_border=COLOR6,
+                    this_screen_border=COLOR8,
+                    other_screen_border=COLOR8,
+                    urgent_border=COLOR1
+                ),
+                widget.Spacer(),
                 widget.Prompt(),
                 widget.CPUGraph(
                     border_color=FOREGROUND,
@@ -236,6 +255,7 @@ screens = [
                     type="line",
                     width=40
                 ),
+                #widget.Volume(theme_path='/usr/share/icons/Papirus/24x24/panel'),
                 # widget.Battery(format='{percent:2.0%}', low_foreground=COLOR1, padding=0),
                 # widget.BatteryIcon(theme_path='/usr/share/icons/Papirus/24x24/panel', padding=0),
                 widget.Systray(icon_size=24),
@@ -245,6 +265,7 @@ screens = [
                 widget.Clock(fontsize=20, format='%T', background=COLOR6, foreground=BACKGROUND)
             ],
             28,
+            background=BACKGROUND
         ),
     ),
 ]
@@ -284,8 +305,9 @@ floating_layout = layout.Floating(float_rules=[
     {'wmclass': 'gcr-prompter'},
     {'wmclass': 'nm-connection-editor'},
     {'wmclass': 'zoom'},
-    {'wmclass': 'Xephyr'}
-])
+    {'wmclass': 'Xephyr'},
+    {'wmclass': 'feh'}
+    ], **layout_defaults)
 auto_fullscreen = True
 focus_on_window_activation = "smart"
 
