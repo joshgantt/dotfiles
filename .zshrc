@@ -1,5 +1,4 @@
-# If you come from bash you might have to change your $PATH.
-export PATH=$HOME/bin:/usr/local/bin:$PATH
+# $PATH is set in .zshenv
 
 # Path to your oh-my-zsh installation.
 export ZSH="/home/josh/.oh-my-zsh"
@@ -99,15 +98,23 @@ source $ZSH/oh-my-zsh.sh
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
+autoload -U +X bashcompinit && bashcompinit
+
 fpath=(/usr/local/share/zsh-completions $fpath)
 rm -f "$HOME/.zcompdump"; compinit
 
+source $HOME/.oh-my-zsh/custom/plugins/az.completion
+
 alias ssh="TERM=xterm ssh"
 alias config='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
+alias remmina='remmina -i'
+alias hist="history -E | less"
 
 (cat ~/.cache/wal/sequences &)
 source ~/.cache/wal/colors-tty.sh
 
 zstyle ':completion:*' rehash true
+
+#bindkey -v
 
 neofetch
