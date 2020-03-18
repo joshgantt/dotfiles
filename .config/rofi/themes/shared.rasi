@@ -1,0 +1,20 @@
+@import "~/.cache/wal/colors-rofi-dark.rasi"
+* {
+  background-color: @background;
+  text-color: @foreground;
+  font: @icon-font;
+  transparent:		rgba(255,255,255,0);
+}
+#element.selected.normal {
+    background-color: @selected-active-background;
+    text-color: @selected-normal-foreground;
+}
+#element.selected.urgent {
+    background-color: @selected-urgent-background;
+    text-color: @selected-urgent-foreground;
+}
+#element.selected.active {
+    background-color: @selected-active-background;
+    text-color: @selected-active-foreground;
+}
+

@@ -1,0 +1,27 @@
+{
+  "wallpaper": "/home/josh/.config/colorschemes/backgrounds/sawmill.jpg",
+  "alpha": "100",
+  "special": {
+    "background": "#151b1b",
+    "foreground": "#c7c2c2",
+    "cursor": "#c7c2c2"
+  },
+  "colors": {
+    "color0": "#151b1b",
+    "color1": "#af4a3e",
+    "color2": "#a0ad80",
+    "color3": "#60ac6b",
+    "color4": "#3eaa8d",
+    "color5": "#14a79f",
+    "color6": "#4cbbbf",
+    "color7": "#c7c2c2",
+    "color8": "#594a48",
+    "color9": "#af4a3e",
+    "color10": "#a0ad80",
+    "color11": "#60ac6b",
+    "color12": "#3eaa8d",
+    "color13": "#14a79f",
+    "color14": "#4cbbbf",
+    "color15": "#c7c2c2"
+  }
+}

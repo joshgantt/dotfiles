@@ -1,0 +1,27 @@
+{
+  "wallpaper": "/home/josh/.config/colorschemes/backgrounds/volcano2.jpg",
+  "alpha": "100",
+  "special": {
+    "background": "#0C1215",
+    "foreground": "#b0bbc2",
+    "cursor": "#b0bbc2"
+  },
+  "colors": {
+    "color0": "#0C1215",
+    "color1": "#2B3A46",
+    "color2": "#364754",
+    "color3": "#4F5C66",
+    "color4": "#B45439",
+    "color5": "#EEA750",
+    "color6": "#5D758C",
+    "color7": "#b0bbc2",
+    "color8": "#7b8287",
+    "color9": "#2B3A46",
+    "color10": "#364754",
+    "color11": "#4F5C66",
+    "color12": "#B45439",
+    "color13": "#EEA750",
+    "color14": "#5D758C",
+    "color15": "#b0bbc2"
+  }
+}

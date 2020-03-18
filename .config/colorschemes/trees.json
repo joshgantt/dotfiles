@@ -1,0 +1,27 @@
+{
+  "wallpaper": "/home/josh/.config/colorschemes/backgrounds/trees.png",
+  "alpha": "100",
+  "special": {
+    "background": "#1a1a19",
+    "foreground": "#c5c5c5",
+    "cursor": "#c5c5c5"
+  },
+  "colors": {
+    "color0": "#1a1a19",
+    "color1": "#724630",
+    "color2": "#4b6544",
+    "color3": "#796c39",
+    "color4": "#6d844f",
+    "color5": "#bd7435",
+    "color6": "#c49e3c",
+    "color7": "#c5c5c5",
+    "color8": "#535352",
+    "color9": "#724630",
+    "color10": "#4b6544",
+    "color11": "#796c39",
+    "color12": "#6d844f",
+    "color13": "#bd7435",
+    "color14": "#c49e3c",
+    "color15": "#c5c5c5"
+  }
+}

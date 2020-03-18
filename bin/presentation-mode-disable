@@ -1,0 +1,19 @@
+#!/bin/bash
+
+FILE=~/.config/xfce4/xfconf/xfce-perchannel-xml/xfce4-power-manager.xml
+
+printf "Presentation Mode Control Enabled" | systemd-cat -t xfce4-power-manager
+
+while true; do  
+  while inotifywait -e modify,moved_to,create $FILE; do
+    echo "File Changed, inotifywait breaks so this is irrelevant"
+  done
+  if grep presentation $FILE | grep true; then
+    notify-send 'Presentation Mode Enabled for 2 Hours' --icon=uninterruptible-power-supply
+    printf "Presentation Mode Enabled - see you in 2 hours!" | systemd-cat -t xfce4-power-manager
+    sleep 7200
+    xfconf-query -c xfce4-power-manager -p /xfce4-power-manager/presentation-mode -s false
+    notify-send 'Presentation Mode Disabled by Timeout' --icon=uninterruptible-power-supply
+    printf "Presentation Mode Disabled by Timeout!" | systemd-cat -t xfce4-power-manager
+  fi
+done

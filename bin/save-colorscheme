@@ -1,0 +1,16 @@
+#!/bin/bash
+
+BG_PATH=$(grep wallpaper ~/.cache/wal/colors.json | awk -F'["]' '{print $(NF-1)}')
+BG_FILENAME=$(grep wallpaper ~/.cache/wal/colors.json | awk -F'["/]' '{print $(NF-1)}')
+
+if [ -z "$1" ]
+  then
+    THEME_NAME=$(echo $BG_FILENAME | awk -F'.' '{print $1}')
+  else
+    THEME_NAME=$1
+fi
+
+cat ~/.cache/wal/colors.json | jq '.wallpaper = $newVal' --arg newVal "/home/josh/.config/colorschemes/backgrounds/$BG_FILENAME" > ~/.config/colorschemes/$THEME_NAME.json
+cp $BG_PATH ~/.config/colorschemes/backgrounds/
+
+echo "Saved $THEME_NAME.json to ~/.config/colorschemes!"

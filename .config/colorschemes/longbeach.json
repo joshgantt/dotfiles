@@ -1,0 +1,27 @@
+{
+  "wallpaper": "/home/josh/.config/colorschemes/backgrounds/longbeach.jpg",
+  "alpha": "100",
+  "special": {
+    "background": "#181215",
+    "foreground": "#a6c4eb",
+    "cursor": "#a6c4eb"
+  },
+  "colors": {
+    "color0": "#181215",
+    "color1": "#0571CD",
+    "color2": "#126AD3",
+    "color3": "#5B75CB",
+    "color4": "#B16EB7",
+    "color5": "#0F90EC",
+    "color6": "#5C93CA",
+    "color7": "#a6c4eb",
+    "color8": "#7489a4",
+    "color9": "#0571CD",
+    "color10": "#126AD3",
+    "color11": "#5B75CB",
+    "color12": "#B16EB7",
+    "color13": "#0F90EC",
+    "color14": "#5C93CA",
+    "color15": "#a6c4eb"
+  }
+}

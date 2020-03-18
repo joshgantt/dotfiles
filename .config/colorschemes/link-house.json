@@ -1,0 +1,27 @@
+{
+  "wallpaper": "/home/josh/.config/colorschemes/backgrounds/link-house.jpg",
+  "alpha": "100",
+  "special": {
+    "background": "#191919",
+    "foreground": "#c7c4c3",
+    "cursor": "#c7c4c3"
+  },
+  "colors": {
+    "color0": "#191919",
+    "color1": "#aa6f59",
+    "color2": "#a7a186",
+    "color3": "#93a949",
+    "color4": "#79aa7f",
+    "color5": "#4e97a4",
+    "color6": "#8a9ea9",
+    "color7": "#c7c4c3",
+    "color8": "#58504c",
+    "color9": "#aa6f59",
+    "color10": "#a7a186",
+    "color11": "#93a949",
+    "color12": "#79aa7f",
+    "color13": "#4e97a4",
+    "color14": "#8a9ea9",
+    "color15": "#c7c4c3"
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "wallpaper": "/home/josh/.config/colorschemes/backgrounds/navio.jpg",
+  "alpha": "100",
+  "special": {
+    "background": "#2e3440",
+    "foreground": "#f5dcd1",
+    "cursor": "#f5dcd1"
+  },
+  "colors": {
+    "color0": "#2e3440",
+    "color1": "#537596",
+    "color2": "#6A89A9",
+    "color3": "#5CABCB",
+    "color4": "#9B94A7",
+    "color5": "#D6A7A9",
+    "color6": "#F6B4AF",
+    "color7": "#f5dcd1",
+    "color8": "#ab9a92",
+    "color9": "#537596",
+    "color10": "#6A89A9",
+    "color11": "#5CABCB",
+    "color12": "#9B94A7",
+    "color13": "#D6A7A9",
+    "color14": "#F6B4AF",
+    "color15": "#f5dcd1"
+  }
+}

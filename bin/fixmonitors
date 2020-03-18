@@ -1,0 +1,7 @@
+#!/bin/bash
+
+pkill compton
+xrandr --output eDP1 --off --output DP1-1 --auto --rotate left --crtc 0 --primary --output DP1-2 --mode 1920x1080 --rate 60 --rotate normal --right-of DP1-1 --crtc 1 --verbose
+wal -R
+qtile-cmd -o cmd -f restart
+compton -b

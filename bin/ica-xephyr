@@ -1,0 +1,32 @@
+#!/bin/sh
+
+HERE=$(dirname $(readlink -f $0))
+HORIZ_SCREEN_SIZE=1904x1036+0+0
+XDISPLAY=${XDISPLAY:-:1}
+LOG_LEVEL=${LOG_LEVEL:-INFO}
+if [[ -z $PYTHON ]]; then
+    PYTHON=python
+fi
+
+# Determine .ica to use
+if [ -z "$1" ]
+  then
+    ICA_FILE=$(ls -t ~/downloads/*.ica | head -1)
+  else
+    ICA_FILE=$1
+fi
+
+# Start Xephyr screen
+#Xephyr +extension RANDR +xinerama -screen ${VERT_SCREEN_SIZE} -screen ${HORIZ_SCREEN_SIZE} ${XDISPLAY} -ac &
+Xephyr ${XDISPLAY} -screen $HORIZ_SCREEN_SIZE -ac &
+#Xephyr ${XDISPLAY} -ac &
+XEPHYR_PID=$!
+
+# Start desired application; tidy up after completion
+(
+  sleep 1
+  env DISPLAY=${XDISPLAY} /opt/Citrix/ICAClient/wfica -file "$ICA_FILE" -geometry $HORIZ_SCREEN_SIZE &
+  ICA_PID=$!
+  wait $ICA_PID
+  kill $XEPHYR_PID
+)

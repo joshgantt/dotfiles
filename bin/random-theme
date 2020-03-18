@@ -1,0 +1,9 @@
+#!/bin/bash
+
+RANDOM_THEME=$(ls -p ~/.config/colorschemes/ | grep -v / | sort -R | head -1)
+
+figlet "$RANDOM_THEME"
+
+wal -q -f ~/.config/colorschemes/$RANDOM_THEME
+
+spicetify apply -q

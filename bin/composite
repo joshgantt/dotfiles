@@ -1,0 +1,25 @@
+#!/bin/bash
+
+while [ "$1" != "" ]; do
+    case $1 in
+        on)
+		compton -b && printf "Started compton..." | systemd-cat -t compton
+		exit
+                ;;
+        off)
+		kill $(pgrep compton) && printf "Stopped compton..." | systemd-cat -t compton
+		exit
+                ;;
+	toggle)
+		if [[ $(pgrep compton) ]]
+			then
+				kill $(pgrep compton) && printf "Toggled compton off..." | systemd-cat -t compton
+			else
+				compton -b && printf "Togged compton on..." | systemd-cat -t compton
+		fi
+		exit
+		;;
+        * )                     echo "Usage: $0 on/off/toggle"
+                                exit 1
+    esac
+done

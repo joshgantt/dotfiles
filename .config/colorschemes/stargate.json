@@ -1,0 +1,27 @@
+{
+  "wallpaper": "/home/josh/.config/colorschemes/backgrounds/stargate.jpg",
+  "alpha": "100",
+  "special": {
+    "background": "#0E1917",
+    "foreground": "#e0d0ca",
+    "cursor": "#e0d0ca"
+  },
+  "colors": {
+    "color0": "#0E1917",
+    "color1": "#4E524B",
+    "color2": "#A3512A",
+    "color3": "#AF563E",
+    "color4": "#E16328",
+    "color5": "#DE924E",
+    "color6": "#C1798B",
+    "color7": "#e0d0ca",
+    "color8": "#9c918d",
+    "color9": "#4E524B",
+    "color10": "#A3512A",
+    "color11": "#AF563E",
+    "color12": "#E16328",
+    "color13": "#DE924E",
+    "color14": "#C1798B",
+    "color15": "#e0d0ca"
+  }
+}

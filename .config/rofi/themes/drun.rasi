@@ -1,0 +1,47 @@
+/* This theme is intended for a 5 items wide menu
+ * on a 1366x768 resolution.
+ */
+@import "./shared.rasi"
+* {
+  background-color: @transparent;
+}
+#window {
+  padding: 300px 500px;
+  width: 100%;
+  height: 100%;
+  background-color: @transparent;
+}
+#element {
+  border: 0;
+  padding: 10 10 10;
+  border-radius: 4px;
+}
+#message {
+    border:       			2px 0px 0px ;
+    border-color: 			@selected-urgent-background;
+    padding: 				10 1% 10;
+}
+#listview {
+  fixed-height: 			0;
+  border:       			4px 0px 0px ;
+  border-color: 			@background;
+  background-color: @transparent;
+  spacing:      			10px;
+  padding: 				10 1% 10;
+  columns:				2;
+}
+#element normal normal{
+  background-color: @transparent;
+}
+#element alternate normal{
+  background-color: @transparent;
+}
+#element selected normal{
+  background-color: @transparent;
+  text-color: @selected-active-background;
+} 
+#prompt{
+  text-color: @selected-active-background;
+}
+/* Input window */
+/* List of entries top right bottom left */
